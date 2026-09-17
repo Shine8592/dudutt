@@ -68,6 +68,27 @@ def main():
     check("含危险操作警告", "不可逆" in text or "不能撤销" in text)
     check("警告不要调内部接口", "内部接口" in text or "严禁" in text)
 
+    # 功能全景（本轮新增：确保后台所有模块都被记录）
+    check("含后台功能全景章节", "功能全景" in text or "19 个" in text)
+    for module in ("团购活动", "商品库", "订单管理", "售后管理", "物流信息",
+                   "团员管理", "团长管理", "资金中心", "营销工具", "数据中心",
+                   "企微助手", "设置"):
+        check(f"覆盖模块「{module}」", module in text)
+
+    # 后台地图参考文档的深度
+    bm = SRC / "references" / "backend-map.md"
+    if bm.exists():
+        bmt = bm.read_text(encoding="utf-8")
+        print("\n--- backend-map.md 内容 ---")
+        check("含路由表", "/groups" in bmt and "/orders/" in bmt)
+        check("含 testid 清单", "beast-core-button" in bmt)
+        check("含团管理菜单项", "结束团" in bmt and "修改团信息" in bmt)
+        check("含弹窗处理", "dismiss_popups" in bmt or "Escape" in bmt)
+        check("含内部接口红线警告", "严禁" in bmt)
+        check("含菜单 DOM 结构", "shell-menu-item" in bmt)
+        check("含重新侦察方法", "重新侦察" in bmt)
+        check("标注未采集项(⏳)", "⏳" in bmt)
+
     total = sum(f.stat().st_size for f in SRC.rglob("*") if f.is_file())
     n = len([f for f in SRC.rglob("*") if f.is_file()])
     print(f"\n共 {n} 个文件，{total / 1024:.1f} KB")
