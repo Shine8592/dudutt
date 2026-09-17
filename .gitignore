@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# 测试临时文件
+tests/_tmp_*.jsonl
+tests/_dbg_*.jsonl
+
+# 凭据与本地状态（绝不入库）
+.env
+*.token
+ktt_state.json
+storage_state.json
+selectors.json
+
+# 审计日志
+.dudutt/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store

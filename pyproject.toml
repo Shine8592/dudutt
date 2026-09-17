@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dudutt"
+version = "0.1.0"
+description = "快团团 MCP server for AI agents: 商品发布/下架/改价/改库存，官方 POP API 为主、浏览器自动化兜底，双后端可插拔。"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Shine8592" }]
+keywords = [
+    "kuaituantuan", "ktt", "快团团", "pinduoduo", "pdd",
+    "mcp", "model-context-protocol", "ai-agent", "llm",
+    "ecommerce", "social-commerce", "automation", "chinese",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Point-Of-Sale",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+# 主路径只依赖 requests（官方 API 后端）；浏览器后端按需额外安装
+dependencies = [
+    "requests>=2.28.0",
+    "mcp>=2.0.0",
+]
+
+[project.optional-dependencies]
+# 浏览器兜底后端（下架/改价 官方 API 未开放时使用）
+browser = ["playwright>=1.40.0"]
+dev = [
+    "build>=1.0.0",
+    "twine>=5.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Shine8592/dudutt"
+Repository = "https://github.com/Shine8592/dudutt"
+Issues = "https://github.com/Shine8592/dudutt/issues"
+Changelog = "https://github.com/Shine8592/dudutt/blob/main/CHANGELOG.md"
+
+[project.scripts]
+dudutt = "dudutt.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["dudutt*"]
+
+[tool.setuptools.package-data]
+dudutt = ["py.typed"]
