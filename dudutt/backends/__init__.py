@@ -100,5 +100,17 @@ def build_backend(name: str | None = None) -> tuple[BaseBackend, list[str]]:
 
 
 def warn(msg: str) -> None:
-    """把提示写到 stderr，保证 stdout 是纯净的 MCP 协议流。"""
-    print(f"[dudutt] {msg}", file=sys.stderr, flush=True)
+    """把提示写到 stderr，保证 stdout 是纯净的 MCP 协议流。
+
+    注意：Windows 上 stderr 默认是 GBK/cp1252，直接写中文会抛
+    UnicodeEncodeError。force_utf8 已在 server 启动时处理，
+    这里再兜一层：万一编码仍不兼容，退化为转义输出而不是崩溃。
+    """
+    try:
+        print(f"[dudutt] {msg}", file=sys.stderr, flush=True)
+    except UnicodeEncodeError:
+        encoding = getattr(sys.stderr, "encoding", None) or "utf-8"
+        safe = f"[dudutt] {msg}".encode(
+            encoding, errors="replace"
+        ).decode(encoding, errors="replace")
+        print(safe, file=sys.stderr, flush=True)

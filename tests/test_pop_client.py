@@ -11,6 +11,15 @@ import json
 import sys
 from pathlib import Path
 
+# Windows CI（以及部分本地终端）默认 stdout 是 cp1252/GBK，
+# 直接 print 中文会抛 UnicodeEncodeError 导致测试整体崩溃。
+# 这里强制把输出流切到 UTF-8，保证跨平台一致。
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from dudutt.pop_client import (

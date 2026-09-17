@@ -21,6 +21,12 @@ from typing import Any, Optional
 # （沿用 duduExcel / 记忆系统 mcp_server.py 的同款处理）
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Windows 上 stdout/stderr 默认是 GBK/cp1252，print 中文会 UnicodeEncodeError。
+# 必须在任何输出之前切换为 UTF-8。
+from dudutt.compat import force_utf8
+
+force_utf8()
+
 try:
     from mcp.server.mcpserver import MCPServer
 except ImportError as e:  # pragma: no cover

@@ -13,6 +13,14 @@ import os
 import sys
 from pathlib import Path
 
+# Windows CI（以及部分本地终端）默认 stdout 是 cp1252/GBK，
+# 直接 print 中文会抛 UnicodeEncodeError 导致测试整体崩溃。
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # 审计写到临时目录，避免污染用户真实日志

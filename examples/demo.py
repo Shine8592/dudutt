@@ -13,6 +13,13 @@ import os
 import sys
 from pathlib import Path
 
+# Windows 终端默认 GBK/cp1252，print 中文会 UnicodeEncodeError
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 # 用 mock 后端，避免演示时触达真实店铺
 os.environ["DUDUTT_BACKEND"] = "mock"
 os.environ["DUDUTT_AUDIT_PATH"] = str(
