@@ -56,6 +56,9 @@ jobs:
           DUDUTT_BACKEND: mock
           PYTHONUTF8: "1"
 
+      - name: Verify SKILL structure
+        run: python tests/test_skill_structure.py
+
       - name: Verify import & CLI entry point
         run: python -c "import dudutt, dudutt.server, dudutt.actions; print('import OK')"
 
