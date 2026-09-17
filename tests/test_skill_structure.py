@@ -8,7 +8,9 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-SRC = Path(r"E:\工作类\研发\dudutt\skill\dudutt")
+# 相对定位：本文件在 tests/ 下，SKILL 在 ../skill/dudutt/
+# ⚠️ 不能用绝对路径——CI 在 Linux 上跑，Windows 路径不存在（此为曾经踩过的坑）
+SRC = Path(__file__).resolve().parent.parent / "skill" / "dudutt"
 FAIL = 0
 
 
@@ -20,6 +22,10 @@ def check(name, cond, detail=""):
 
 
 def main():
+    if not (SRC / "SKILL.md").exists():
+        print(f"[FAIL] 找不到 SKILL.md：{SRC}")
+        return 1
+
     text = (SRC / "SKILL.md").read_text(encoding="utf-8")
     m = re.match(r"^---\r?\n(.*?)\r?\n---\r?\n", text, re.S)
     check("frontmatter 可解析", bool(m))
